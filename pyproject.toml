@@ -1,0 +1,25 @@
+[project]
+
+name = "nezuko-run"
+version = "0.0.1"
+authors = [
+    { name = "Timothee Lafay", email = "timotheelafay4@gmail.com" },
+]
+description = "A small game, where Nezuko has to escape zenitsu !"
+requires-python = ">=3.12"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+nezuko-run = "main:main"

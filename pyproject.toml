@@ -19,7 +19,7 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
-where = ["src"]
+where = ["nezuko_run"]
 
 [project.scripts]
 nezuko-run = "main:main"

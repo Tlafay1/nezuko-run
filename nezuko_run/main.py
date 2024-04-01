@@ -18,19 +18,23 @@ WHITE = 255, 255, 255
 MINGAP = 200
 VELOCITY = 300
 MAXGAP = 600
-OBSTACLESIZE = 50
+OBSTACLESIZE = 200
 OBSTACLENUM = 4
-CHARACTER_SIZE = 100
+CHARACTER_SIZE = 200
 
 nezuko = Nezuko(GROUND_HEIGHT, "imgs/nezuko", 200, CHARACTER_SIZE)
 zenitsu = Zenitsu(GROUND_HEIGHT, "imgs/zenitsu", 50, CHARACTER_SIZE)
 background = Background("imgs/background.jpg", [0, 0], width, height)
 
+character_list = pygame.sprite.Group()
+character_list.add(nezuko)
+character_list.add(zenitsu)
+
 # nezuko_running_sound = pygame.mixer.Sound("sounds/nezuko-running.mp3")
 nezuko_running_sound = None
 pygame.mixer.music.load("sounds/music.mp3")
-pygame.mixer.music.set_volume(0.01)
-# pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
 # nezuko_running_sound.set_volume(0.1)
 
 
@@ -65,8 +69,7 @@ def main():
         screen.fill(BLACK)
 
         background.draw(screen)
-        nezuko.draw(screen)
-        zenitsu.draw(screen)
+        character_list.draw(screen)
 
         if not game_over:
             nezuko.update(deltaTime, nezuko_running_sound)

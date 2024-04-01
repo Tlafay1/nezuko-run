@@ -8,8 +8,6 @@ import os
 class Character(pygame.sprite.Sprite):
     def __init__(self, surfaceHeight: int, images_folder: str, x: int, height: int):
         super().__init__()
-        self.x = x
-        self.y = 0
         self.yvelocity = 0
         self.surfaceHeight = surfaceHeight
         self.images: List[Surface] = []
@@ -19,6 +17,16 @@ class Character(pygame.sprite.Sprite):
         self.load_images(images_folder, height)
         self.image = self.images[0]  # The current image to be displayed
         self.rect = self.image.get_rect()  # The rectangle that encloses the image
+        self.rect.x = x
+        self.y = self.image.get_height()
+
+    @property
+    def y(self):
+        return self.surfaceHeight - self.rect.y
+
+    @y.setter
+    def y(self, y):
+        self.rect.y = self.surfaceHeight - y
 
     def load_images(self, images_folder: str, height: int):
         for file in os.listdir(images_folder):
@@ -35,14 +43,7 @@ class Character(pygame.sprite.Sprite):
         if self.time_counter > 100:
             self.images.append(self.images.pop(0))
             self.image = self.images[0]  # Update the current image
-            self.rect = self.image.get_rect()  # Update the rectangle
             self.time_counter = 0
-
-    def draw(self, display):
-        display.blit(
-            self.image,
-            (self.x, self.surfaceHeight - self.y - self.image.get_height()),
-        )
 
 
 class Background(pygame.sprite.Sprite):

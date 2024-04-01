@@ -8,23 +8,25 @@ nezu = 255, 255, 255
 
 
 class Nezuko(Character):
+    GRAVITY = -10
+    JUMP_FORCE = 1000
 
     def jump(self):
-        if self.y == 0:
-            self.yvelocity = 300
+        if self.y == self.image.get_height():
+            self.yvelocity = self.JUMP_FORCE
 
     def update(self, deltaTime, sound: pygame.mixer.Sound | None):
-        self.yvelocity += -500 * deltaTime
-        self.y += self.yvelocity * deltaTime
-        if self.y < 0:
-            self.y = 0
-            self.yvelocity = 0
+        self.yvelocity += self.GRAVITY
+
+        if self.y + self.yvelocity * deltaTime >= self.image.get_height():
+            self.y += self.yvelocity * deltaTime
+        else:
+            self.y = self.image.get_height()
+
         if sound:
             sound.play()
-        super().update()
 
-    def draw(self, display):
-        super().draw(display)
+        super().update()
 
     def checkCollideObstacle(self, obstacles: list[Rect]):
         # nezuko_rect = self.images[0].get_rect()

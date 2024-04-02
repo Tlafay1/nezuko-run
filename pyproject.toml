@@ -6,7 +6,7 @@ authors = [
     { name = "Timothee Lafay", email = "timotheelafay4@gmail.com" },
 ]
 description = "A small game, where Nezuko has to escape zenitsu !"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 readme = "README.md"
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -22,4 +22,4 @@ dependencies = {file = ["requirements.txt"]}
 where = ["nezuko_run"]
 
 [project.scripts]
-nezuko-run = "main:main"
+nezuko-run = "nezuko_run:main"

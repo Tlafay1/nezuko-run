@@ -10,7 +10,7 @@ from . import Background
 
 pygame.init()
 
-screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
 width: int = screen.get_width()
 height: int = screen.get_height()
 GROUND_HEIGHT = height - 100
@@ -31,35 +31,36 @@ character_list = pygame.sprite.Group()
 character_list.add(nezuko)
 character_list.add(zenitsu)
 
+obstacle_list = pygame.sprite.Group()
+
 # nezuko_running_sound = pygame.mixer.Sound("sounds/nezuko-running.mp3")
 nezuko_running_sound = None
-pygame.mixer.music.load("sounds/music.mp3")
-pygame.mixer.music.set_volume(0.01)
-pygame.mixer.music.play(-1)
+# pygame.mixer.music.load("sounds/music.mp3")
+# pygame.mixer.music.set_volume(0.01)
+# pygame.mixer.music.play(-1)
 # nezuko_running_sound.set_volume(0.1)
 
 
 def main():
-    score = 0
-    xPos = 0
-    yPos = 0
     game_over: bool = False
-    lastFrame = pygame.time.get_ticks()
+    last_frame = pygame.time.get_ticks()
     obstacles: List[Obstacle] = []
-    lastObstacle: int = width
+    last_obstacle: int = width
 
-    for i in range(OBSTACLENUM):
-        lastObstacle += int(
+    for _ in range(OBSTACLENUM):
+        last_obstacle += int(
             MINGAP + (MAXGAP - MINGAP) * random.random()
-        )  # Make distance between rocks random
-        obstacles.append(
-            Obstacle(lastObstacle, OBSTACLESIZE, GROUND_HEIGHT, "imgs/inosuke")
-        )
+        )  # Make distance between obstacles random
+
+        obstacle = Obstacle(last_obstacle, OBSTACLESIZE, GROUND_HEIGHT, "imgs/inosuke")
+
+        obstacles.append(obstacle)
+        obstacle_list.add(obstacle)
 
     while True:
         t = pygame.time.get_ticks()
-        deltaTime = (t - lastFrame) / 1000.0
-        lastFrame = t
+        delta_time = (t - last_frame) / 1000.0
+        last_frame = t
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (
                 event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE
@@ -73,19 +74,17 @@ def main():
 
         background.draw(screen)
         character_list.draw(screen)
+        obstacle_list.draw(screen)
 
         if not game_over:
-            nezuko.update(deltaTime, nezuko_running_sound)
-            nezuko.checkCollideObstacle([obs.images[0].get_rect() for obs in obstacles])
+            nezuko.update(delta_time, nezuko_running_sound)
+            nezuko.checkCollideObstacle(obstacles=obstacles)
             zenitsu.update()
+            for obs in obstacles:
+                obs.update(delta_time, VELOCITY)
 
-        if nezuko.checkOver(zenitsu):
-            game_over = True
-
-        for obs in obstacles:
-            if not game_over:
-                obs.update(deltaTime, VELOCITY)
-            obs.draw(screen)
+        # if nezuko.checkOver(zenitsu):
+        #     game_over = True
 
         if game_over:
             font = pygame.font.SysFont("arial", 40)
@@ -93,12 +92,9 @@ def main():
             text_rect = text_surface.get_rect(center=(width // 2, height // 2))
             screen.blit(text_surface, text_rect)
 
-        lastObstacle -= int(VELOCITY * deltaTime)
+        last_obstacle -= int(VELOCITY * delta_time)
 
         pygame.display.update()
-
-        xPos += 1
-        yPos += 1
 
 
 if __name__ == "__main__":

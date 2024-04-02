@@ -6,10 +6,10 @@ import os
 
 # https://www.geeksforgeeks.org/pygame-control-sprites/
 class Character(pygame.sprite.Sprite):
-    def __init__(self, surfaceHeight: int, images_folder: str, x: int, height: int):
+    def __init__(self, surface_height: int, images_folder: str, x: int, height: int):
         super().__init__()
         self.yvelocity = 0
-        self.surfaceHeight = surfaceHeight
+        self.surface_height = surface_height
         self.images: List[Surface] = []
         self.clock = pygame.time.Clock()
         self.time_counter = 0
@@ -17,16 +17,25 @@ class Character(pygame.sprite.Sprite):
         self.load_images(images_folder, height)
         self.image = self.images[0]  # The current image to be displayed
         self.rect = self.image.get_rect()  # The rectangle that encloses the image
-        self.rect.x = x
+        
+        self.x = x
         self.y = self.image.get_height()
 
     @property
+    def x(self):
+        return self.rect.x
+
+    @x.setter
+    def x(self, x):
+        self.rect.x = x
+
+    @property
     def y(self):
-        return self.surfaceHeight - self.rect.y
+        return self.surface_height - self.rect.y
 
     @y.setter
     def y(self, y):
-        self.rect.y = self.surfaceHeight - y
+        self.rect.y = self.surface_height - y
 
     def load_images(self, images_folder: str, height: int):
         for file in os.listdir(images_folder):

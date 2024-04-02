@@ -15,11 +15,11 @@ class Nezuko(Character):
         if self.y == self.image.get_height():
             self.yvelocity = self.JUMP_FORCE
 
-    def update(self, deltaTime, sound: pygame.mixer.Sound | None):
+    def update(self, delta_time, sound: pygame.mixer.Sound | None):
         self.yvelocity += self.GRAVITY
 
-        if self.y + self.yvelocity * deltaTime >= self.image.get_height():
-            self.y += self.yvelocity * deltaTime
+        if self.y + self.yvelocity * delta_time >= self.image.get_height():
+            self.y += self.yvelocity * delta_time
         else:
             self.y = self.image.get_height()
 
@@ -29,15 +29,13 @@ class Nezuko(Character):
         super().update()
 
     def checkCollideObstacle(self, obstacles: list[Rect]):
-        # nezuko_rect = self.images[0].get_rect()
-        # nezuko_rect.topleft = (self.x, self.surfaceHeight - self.y - nezuko_rect.height)
-        # for value in obstacles:
-        #     obstacle_rect: Rect = value
-        #     obstacle_rect.topleft = (obstacle_rect.x, self.surfaceHeight - self.y - obstacle_rect.height)
-        #     # Don't change the position of the obstacle
-        #     if nezuko_rect.colliderect(obstacle_rect):
-        #         self.x -= 20
-        #         return True
+        for obstacle in obstacles:
+            print("Self rect: ", self.rect.x, self.rect.y, self.rect.width, self.rect.height)
+            print("Obstacle rect: ", obstacle.rect.x, obstacle.rect.y, obstacle.rect.width, obstacle.rect.height)
+            if collide_rect(self, obstacle):
+                print("Collided")
+                self.x -= 20
+                return True
         return False
 
     def checkOver(self, zenitsu: Character):

@@ -1,11 +1,12 @@
 from typing import List
+
 import pygame
 import random
 
 from .obstacle import Obstacle
 from .characters.nezuko import Nezuko
 from .characters.zenitsu import Zenitsu
-from .import Background
+from . import Background
 
 pygame.init()
 
@@ -33,7 +34,7 @@ character_list.add(zenitsu)
 # nezuko_running_sound = pygame.mixer.Sound("sounds/nezuko-running.mp3")
 nezuko_running_sound = None
 pygame.mixer.music.load("sounds/music.mp3")
-pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.set_volume(0.01)
 pygame.mixer.music.play(-1)
 # nezuko_running_sound.set_volume(0.1)
 
@@ -51,7 +52,9 @@ def main():
         lastObstacle += int(
             MINGAP + (MAXGAP - MINGAP) * random.random()
         )  # Make distance between rocks random
-        obstacles.append(Obstacle(lastObstacle, OBSTACLESIZE, GROUND_HEIGHT, "imgs/inosuke"))
+        obstacles.append(
+            Obstacle(lastObstacle, OBSTACLESIZE, GROUND_HEIGHT, "imgs/inosuke")
+        )
 
     while True:
         t = pygame.time.get_ticks()

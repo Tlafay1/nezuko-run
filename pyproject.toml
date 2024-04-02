@@ -5,7 +5,7 @@ version = "0.0.1"
 authors = [
     { name = "Timothee Lafay", email = "timotheelafay4@gmail.com" },
 ]
-description = "A small game, where Nezuko has to escape zenitsu !"
+description = "A small game, where Nezuko has to escape from zenitsu !"
 requires-python = ">=3.10"
 readme = "README.md"
 classifiers = [
@@ -19,7 +19,7 @@ dynamic = ["dependencies"]
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
-where = ["nezuko_run"]
+include = ["nezuko_run", "nezuko_run.*"]
 
 [project.scripts]
-nezuko-run = "nezuko_run:main"
+nezuko-run = "nezuko_run.nezuko_run:main"

@@ -1,7 +1,4 @@
-# obstacle.py
-
-from typing import List
-from .characters.nezuko import Nezuko
+from typing import List, Self
 
 import pygame
 from pygame import Surface
@@ -13,34 +10,51 @@ colour = 0, 0, 255
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, x: int, height: int, surface_height: int, images_folder: str):
         super().__init__()
-        self.height = height
-        self.surface_height = surface_height
-        self.images: List[Surface] = []
-        self.clock = pygame.time.Clock()
-        self.time_counter = 0
+        self.__surface_height = surface_height
+        self.__images: List[Surface] = []
+        self.__clock = pygame.time.Clock()
+        self.__time_counter = 0
 
-        self.load_images(images_folder, height)
-        self.image = self.images[0]  # The current image to be displayed
-        self.rect = self.image.get_rect()  # The rectangle that encloses the image
+        self.__load_images(images_folder, height)
+
+        # Properties required by pygame.sprite.Sprite
+        self.__image = self.__images[0]
+        self.__rect = self.__image.get_rect()
 
         self.x = x
-        self.y = self.image.get_height()
+        self.y = self.__image.get_height()
 
     @property
-    def x(self):
-        return self.rect.x
+    def x(self) -> int:
+        return self.__rect.x
 
     @x.setter
-    def x(self, x):
-        self.rect.x = x
+    def x(self, x) -> None:
+        self.__rect.x = x
 
     @property
-    def y(self):
-        return self.surface_height - self.rect.y
+    def y(self) -> int:
+        return self.__surface_height - self.__rect.y
 
     @y.setter
-    def y(self, y):
-        self.rect.y = self.surface_height - y
+    def y(self, y) -> None:
+        self.__rect.y = self.__surface_height - y
+
+    @property
+    def image(self) -> Surface:
+        return self.__image
+
+    @image.setter
+    def image(self, image: Surface) -> None:
+        self.__image = image
+
+    @property
+    def rect(self) -> pygame.Rect:
+        return self.__rect
+
+    @rect.setter
+    def rect(self, rect: pygame.Rect) -> None:
+        self.__rect = rect
 
     # def draw(self, display):
     #     display.blit(
@@ -48,7 +62,7 @@ class Obstacle(pygame.sprite.Sprite):
     #         (self.x, self.surface_height - self.y - self.images[0].get_height()),
     #     )
 
-    def load_images(self, images_folder: str, height: int):
+    def __load_images(self, images_folder: str, height: int) -> None:
         for file in os.listdir(images_folder):
             file = os.path.join(images_folder, file)
             image: Surface = pygame.image.load(file).convert_alpha()
@@ -56,21 +70,13 @@ class Obstacle(pygame.sprite.Sprite):
                 image, (image.get_width() * height // image.get_height(), height)
             )
             image = pygame.transform.flip(image, True, False)
-            self.images.append(image)
+            self.__images.append(image)
 
-    def update(self, delta_time, velocity):
-        self.time_counter += self.clock.tick()
-        if self.time_counter > 100:
-            self.images.append(self.images.pop(0))
-            self.image = self.images[0]  # Update the current image
-            self.time_counter = 0
+    def update(self, delta_time, velocity) -> Self:
+        self.__time_counter += self.__clock.tick()
+        if self.__time_counter > 100:
+            self.__images.append(self.__images.pop(0))
+            self.__image = self.__images[0]  # Update the current image
+            self.__time_counter = 0
         self.x -= velocity * delta_time
-
-    def checkOver(self, nezuko: Nezuko):
-        nezuko_rect = nezuko.image.get_rect()
-        nezuko_rect.topleft = (nezuko.rect.x, nezuko.surface_height - nezuko.rect.y - nezuko_rect.height)
-        obstacle_rect = self.image.get_rect()
-        obstacle_rect.topleft = (self.x, self.surface_height - self.y - obstacle_rect.height)
-        if nezuko_rect.colliderect(obstacle_rect):
-            return True
-        return False
+        return self

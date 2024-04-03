@@ -1,8 +1,9 @@
+from typing import Self
 import pygame
-from pygame import Surface, Rect
-from pygame.sprite import Sprite, collide_rect
+from pygame.sprite import collide_rect
 
-from nezuko_run import Character
+from ..characters import Character
+from ..obstacle import Obstacle
 
 nezu = 255, 255, 255
 
@@ -11,11 +12,12 @@ class Nezuko(Character):
     GRAVITY = -10
     JUMP_FORCE = 1000
 
-    def jump(self):
+    def jump(self) -> Self:
         if self.y == self.image.get_height():
             self.yvelocity = self.JUMP_FORCE
+        return self
 
-    def update(self, delta_time, sound: pygame.mixer.Sound | None):
+    def update(self, delta_time, sound: pygame.mixer.Sound | None) -> Self:
         self.yvelocity += self.GRAVITY
 
         if self.y + self.yvelocity * delta_time >= self.image.get_height():
@@ -27,18 +29,16 @@ class Nezuko(Character):
             sound.play()
 
         super().update()
+        return self
 
-    def checkCollideObstacle(self, obstacles: list[Rect]):
+    def checkCollideObstacle(self, obstacles: list[Obstacle]) -> bool:
         for obstacle in obstacles:
-            print("Self rect: ", self.rect.x, self.rect.y, self.rect.width, self.rect.height)
-            print("Obstacle rect: ", obstacle.rect.x, obstacle.rect.y, obstacle.rect.width, obstacle.rect.height)
-            if collide_rect(self, obstacle):
-                print("Collided")
+            if collide_rect(self, obstacle):  # type: ignore
                 self.x -= 20
                 return True
         return False
 
-    def checkOver(self, zenitsu: Character):
+    def checkOver(self, zenitsu: Character) -> bool:
         # nezuko_rect = self.images[0].get_rect()
         # nezuko_rect.topleft = (self.x, self.surfaceHeight - self.y - nezuko_rect.height)
         # zenitsu_rect = zenitsu.images[0].get_rect()

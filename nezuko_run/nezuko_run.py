@@ -10,18 +10,18 @@ from . import Background
 
 pygame.init()
 
-screen = pygame.display.set_mode(flags=pygame.FULLSCREEN)
+screen = pygame.display.set_mode(flags=pygame.FULLSCREEN, display=0)
 width: int = screen.get_width()
 height: int = screen.get_height()
 GROUND_HEIGHT = height - 100
 BLACK = 0, 0, 0
 WHITE = 255, 255, 255
-MINGAP = 200
-VELOCITY = 300
-MAXGAP = 600
-OBSTACLESIZE = 200
+MINGAP = 1000
+MAXGAP = 1500
+VELOCITY = 1000
+OBSTACLESIZE = 150
 OBSTACLENUM = 4
-CHARACTER_SIZE = 200
+CHARACTER_SIZE = 150
 
 nezuko = Nezuko(GROUND_HEIGHT, "imgs/nezuko", 200, CHARACTER_SIZE)
 zenitsu = Zenitsu(GROUND_HEIGHT, "imgs/zenitsu", 50, CHARACTER_SIZE)

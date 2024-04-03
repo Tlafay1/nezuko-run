@@ -1,4 +1,4 @@
-from nezuko_run import Character
+from . import Character
 
 
 class Zenitsu(Character):

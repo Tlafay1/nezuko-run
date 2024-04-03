@@ -22,4 +22,4 @@ dependencies = {file = ["requirements.txt"]}
 include = ["nezuko_run", "nezuko_run.*"]
 
 [project.scripts]
-nezuko-run = "nezuko_run.nezuko_run:main"
+nezuko-run = "nezuko_run.main:main"
